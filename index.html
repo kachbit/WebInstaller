@@ -37,13 +37,11 @@
 <link rel="apple-touch-icon" href="${params.get('icon1')}" />
     `;
     if (window.navigator.standalone) {
-       setTimeout(() => {
-    window.open(params.get('url1'));
-})
+   
+    window.location = (params.get('url1'));
 
-      document.write(`<button onclick="setTimeout(() => {
-    window.open(${params.get('url1')});
-})">launch</button>`)
+
+      document.write(`<button onclick="window.location = (${params.get('url1')});">launch</button>`)
 } else {
       document.write("ADD TO HOMESCREEN<br>")
 }
