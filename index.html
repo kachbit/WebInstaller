@@ -4,35 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>webinstaller</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
-
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="application-name" content="WebInstaller" />
-<meta name="apple-mobile-web-app-title" content="WebInstaller" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<link rel="apple-touch-icon" href="/icon.png" />
-
-
 </head>
 
 <body>
-test
-  <!--
-  This script places a badge on your repl's full-browser view back to your repl's cover
-  page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green,
-  teal, blue, blurple, magenta, pink!
-  -->
-  
+
 </body>
 <script>
   console.log(window.location.href)
-  var url1 = window.location.href;
-  var params = new URLSearchParams(url1.search);
+  var url1 = new URL(window.location.href);
+  var params = url1.searchParams;
 
   var label;
   var url;
@@ -41,26 +23,34 @@ test
     label = document.querySelector("#label").value;
     url = document.querySelector("#url").value;
     icon = document.querySelector("#icon").value;
-    location.href = url1+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}`;
+    location.href = location.origin+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}`;
   }
   
-  if(new URLSearchParams(url1.search).get('label1')) {
-    alert("c")
+  if(params.get('label1')) {
     document.querySelector("head").innerHTML += `
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="application-name" content="${localStorage.getItem("label")}" />
-<meta name="apple-mobile-web-app-title" content="${localStorage.getItem("label")}" />
+<meta name="application-name" content="${params.get('label1')}" />
+<meta name="apple-mobile-web-app-title" content="${params.get('label1')}" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<link rel="apple-touch-icon" href="${localStorage.getItem("icon")}" />
+<link rel="apple-touch-icon" href="${params.get('icon1')}" />
     `;
-    document.body.innerHTML += `<iframe src="${localStorage.getItem("url")}" style="width:100vw;height:100vh">`;
-    console.log("a. "+localStorage.getItem("url"))
+    if (window.navigator.standalone) {
+       setTimeout(() => {
+    window.open(params.get('url1'));
+})
+
+      document.write(`<button onclick="setTimeout(() => {
+    window.open(${params.get('url1')});
+})">launch</button>`)
+} else {
+      document.write("ADD TO HOMESCREEN<br>")
+}
+
   } else {
-    console.log(params.values());
     document.body.innerHTML += `
-      enter app details to install<br>
+     <span> enter app details to install<span><br>
  <input type="text" name="label" placeholder="label" id="label">
 <input type="text" name="icon" placeholder="icon url" id="icon">
   <input type="text" name="url" placeholder="url" id="url">
