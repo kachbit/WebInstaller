@@ -23,7 +23,7 @@
     label = document.querySelector("#label").value;
     url = document.querySelector("#url").value;
     icon = document.querySelector("#icon").value;
-    location.href = location.origin+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}`;
+    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}`;
   }
   
   if(params.get('label1')) {
