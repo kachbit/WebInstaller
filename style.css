@@ -19,7 +19,6 @@ input {
   border-radius:9px;
   margin:10px;
   caret-color: slategray;
-  display:block;
 }
 button {
     outline:none;
