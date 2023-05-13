@@ -23,7 +23,7 @@
     label = document.querySelector("#label").value;
     url = document.querySelector("#url").value;
     icon = document.querySelector("#icon").value;
-    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}`;
+    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}&fs=${fs.checked ? "y" : "n"}`;
   }
   
   if(params.get('label1')) {
@@ -37,11 +37,43 @@
 <link rel="apple-touch-icon" href="${params.get('icon1') ? params.get('icon1') : ("https://via.placeholder.com/150x150/333/fff?text="+encodeURIComponent(params.get('label1')))}" /> `;
 
     if (window.navigator.standalone) {
-   
+   if(params.get("fs") == "y") {
+     console.log("y")
+    document.write(`<body style="margin:0px;padding:0px">
+<style>
+.btn1 {
+   background: azure;
+   margin:0px;
+   width:100%;
+   height:45px;
+   border-radius:0px;
+   text-align:center;
+   color:black;
+   font-family:arial;
+   font-size:29px;
+   display:inline;
+   border:0px none;
+   border-left: 1px solid gray;
+   border-right: 1px solid gray;
+   cursor:pointer
+}
+body {
+   background: azure;
+}
+</style>
+<button class="btn1" id="r"> ⟳ </button>
+<iframe id="frame" src="${(${params.get('url1')})}" style="width:100%;height:100vh;padding:0px;margin:0px;border:0px none;"></iframe>
+
+<script>
+r.onclick = () => { frame.src += "" }
+</script${">"}
+</body>`);
+   } else {
   window.location=(params.get('url1'));
 
 
       document.write(`<button onclick="window.location = (${params.get('url1')});">launch</button>`)
+   }
 } else {
       document.write("ADD TO HOMESCREEN<br>")
 }
@@ -52,6 +84,7 @@
  <input type="text" name="label" placeholder="label" id="label">
 <input type="text" name="icon" placeholder="icon url" id="icon">
   <input type="text" name="url" placeholder="url" id="url">
+  <label><input id="fs" type="checkbox"> Full screen (may not work on all websites like google and yt)</label>
   <button id="submit" onclick="submitfunc()">install</button>
     `
   }
