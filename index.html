@@ -32,6 +32,7 @@ var loadfromhtml;
   }
   
   if(params.get('label1')) {
+    loadfromhtml = params.get('htmlcontent') == "true" && !params.get('url1');
     document.querySelector("head").innerHTML += `
       <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="application-name" content="${params.get('label1')}" />
@@ -42,7 +43,7 @@ var loadfromhtml;
 <link rel="apple-touch-icon" href="${params.get('icon1') ? params.get('icon1') : ("https://via.placeholder.com/150x150/333/fff?text="+encodeURIComponent(params.get('label1')))}" /> `;
 
     if (window.navigator.standalone) {
-      loadfromhtml = params.get('htmlcontent') == "true" && !params.get('url1');
+      
    if(params.get("fs") == "y") {
      console.log("y")
     document.write(`<body style="margin:0px;padding:0px">
