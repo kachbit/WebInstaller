@@ -15,15 +15,17 @@
   console.log(window.location.href)
   var url1 = new URL(window.location.href);
   var params = url1.searchParams;
-
+var loadfromhtml;
   var label;
   var url;
   var icon;
+  var htmlcont;
   function submitfunc() {
     label = document.querySelector("#label").value;
     url = document.querySelector("#url").value;
     icon = document.querySelector("#icon").value;
-    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}&fs=${fs.checked ? "y" : "n"}`;
+    htmlcont = document.querySelector("#html1").value;
+    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}&fs=${fs.checked ? "y" : "n"}&htmlcontent=${encodeURIComponent(htmlcont)}`;
   }
   
   if(params.get('label1')) {
@@ -37,6 +39,7 @@
 <link rel="apple-touch-icon" href="${params.get('icon1') ? params.get('icon1') : ("https://via.placeholder.com/150x150/333/fff?text="+encodeURIComponent(params.get('label1')))}" /> `;
 
     if (window.navigator.standalone) {
+      loadfromhtml = params.get('htmlcontent') && params.get('htmlcontent') != "" && !params.get('url1')
    if(params.get("fs") == "y") {
      console.log("y")
     document.write(`<body style="margin:0px;padding:0px">
@@ -60,15 +63,16 @@ body {
    background: azure;
 }
 </style>
-<iframe id="frame" src="${params.get('url1')}" style="width:100vw;height:100vh;padding:0px;margin:0px;border:0px none;"></iframe>
+<iframe id="frame" ${loadfromhtml ? "srcdoc" : "src"}="${loadfromhtml ? params.get('htmlcontent') : params.get('url1')}" style="width:100vw;height:100vh;padding:0px;margin:0px;border:0px none;"></iframe>
 
 <script>
 r.onclick = () => { frame.src += "" }
 </script${">"}
 </body>`);
    } else {
-  window.location=(params.get('url1'));
-
+     // If user entered raw html, my HTML-Mirrorer api will turn the raw html into a usable url that serve as the destination for the built-in browser. Otherwise, we will use the inputted url as the destination.
+  loadfromhtml ? window.location=(`https://kachbit.github.io/HTML-Mirrorer/?data=${params.get('htmlcontent')}`) : window.location=(params.get('url1'));
+  
 
       document.write(`<button onclick="window.location = (${params.get('url1')});">launch</button>`)
    }
@@ -81,7 +85,9 @@ r.onclick = () => { frame.src += "" }
      <span> enter app details to install<span><br>
  <input type="text" name="label" placeholder="label" id="label">
 <input type="text" name="icon" placeholder="icon url" id="icon">
-  <input type="text" name="url" placeholder="url" id="url"><br>
+  <input type="text" name="url" placeholder="url" id="url">
+  <input type="text" name="html" placeholder="html" id="html1">
+  <br>
   <label><input id="fs" type="checkbox"> Full screen (may not work on all sites)</label>
   <br><button id="submit" onclick="submitfunc()">install</button>
     `
