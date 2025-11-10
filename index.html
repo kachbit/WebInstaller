@@ -25,7 +25,10 @@ var loadfromhtml;
     url = document.querySelector("#url").value;
     icon = document.querySelector("#icon").value;
     htmlcont = document.querySelector("#html1").value;
-    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}&fs=${fs.checked ? "y" : "n"}&htmlcontent=${encodeURIComponent(htmlcont)}`;
+    if (htmlcont && htmlcont.trim() !== "") {
+      localStorage.setItem("htmlcontent_data", htmlcont);
+    }
+    location.href = window.location.href.split('?')[0]+`?label1=${encodeURIComponent(label)}&url1=${encodeURIComponent(url)}&icon1=${encodeURIComponent(icon)}&fs=${fs.checked ? "y" : "n"}&htmlcontent=${htmlcont.trim() !== "" ? "true" : "false"}`;
   }
   
   if(params.get('label1')) {
@@ -39,7 +42,7 @@ var loadfromhtml;
 <link rel="apple-touch-icon" href="${params.get('icon1') ? params.get('icon1') : ("https://via.placeholder.com/150x150/333/fff?text="+encodeURIComponent(params.get('label1')))}" /> `;
 
     if (window.navigator.standalone) {
-      loadfromhtml = params.get('htmlcontent') && params.get('htmlcontent') != "" && !params.get('url1')
+      loadfromhtml = params.get('htmlcontent') == "true" && !params.get('url1');
    if(params.get("fs") == "y") {
      console.log("y")
     document.write(`<body style="margin:0px;padding:0px">
@@ -63,7 +66,7 @@ body {
    background: azure;
 }
 </style>
-<iframe id="frame" ${loadfromhtml ? "srcdoc" : "src"}="${loadfromhtml ? params.get('htmlcontent') : params.get('url1')}" style="width:100vw;height:100vh;padding:0px;margin:0px;border:0px none;"></iframe>
+<iframe id="frame" ${loadfromhtml ? "srcdoc" : "src"}="${loadfromhtml ? localStorage.getItem("htmlcontent_data") : params.get('url1')}" style="width:100vw;height:100vh;padding:0px;margin:0px;border:0px none;"></iframe>
 
 <script>
 r.onclick = () => { frame.src += "" }
@@ -71,7 +74,7 @@ r.onclick = () => { frame.src += "" }
 </body>`);
    } else {
      // If user entered raw html, my HTML-Mirrorer api will turn the raw html into a usable url that serve as the destination for the built-in browser. Otherwise, we will use the inputted url as the destination.
-  loadfromhtml ? window.location=(`https://kachbit.github.io/HTML-Mirrorer/?data=${params.get('htmlcontent')}`) : window.location=(params.get('url1'));
+  loadfromhtml ? window.location=(`https://kachbit.github.io/HTML-Mirrorer/?data=${localStorage.getItem("htmlcontent_data")}`) : window.location=(params.get('url1'));
   
 
       document.write(`<button onclick="window.location = (${params.get('url1')});">launch</button>`)
